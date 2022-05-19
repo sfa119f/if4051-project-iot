@@ -186,10 +186,10 @@ void mix_columns(bool inv) {
   }
 }
 
-String encrypt(String msg, String key) {
-  int input_byte[msg.length()];
-  for (int i = 0; i < msg.length(); i++) {
-    input_byte[i] = msg[i];
+String encrypt(byte *msg, int msgLen, String key, byte result[16]) {
+  int input_byte[msgLen];
+  for (int i = 0; i < msgLen; i++) {
+    input_byte[i] = int(msg[i]);
   }
   for (int row = 0; row < 4; row++) {
     for (int col = 0; col < NB; col++) {
@@ -224,13 +224,14 @@ String encrypt(String msg, String key) {
   for (int i = 0; i < res.length(); i++) {
     int temp = res[i];
   }
-  return res;
+  res.getBytes(result, res.length());
+  // return res;
 }
 
-String decrypt(String ciphertext, String key) {
-  int cipher[ciphertext.length()];
-  for (int i = 0; i < ciphertext.length(); i++) {
-    cipher[i] = ciphertext[i];
+String decrypt(byte *ciphertext, int cipherLen, String key, byte result[16]) {
+  int cipher[cipherLen];
+  for (int i = 0; i < cipherLen; i++) {
+    cipher[i] = int(ciphertext[i]);
   }
   for (int row = 0; row < 4; row++) {
     for (int col = 0; col < NB; col++) {
@@ -265,5 +266,6 @@ String decrypt(String ciphertext, String key) {
   for (int i = 0; i < res.length(); i++) {
     int temp = res[i];
   }
-  return res;
+  res.getBytes(result, res.length());
+  // return res;
 }
