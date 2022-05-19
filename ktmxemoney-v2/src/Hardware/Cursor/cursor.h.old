@@ -1,0 +1,7 @@
+#include <functional>
+
+void inc_cursor();
+void dec_cursor();
+void confirm_cursor();
+int get_cursor();
+int get_cursor_active();

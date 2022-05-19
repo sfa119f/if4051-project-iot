@@ -1,0 +1,57 @@
+#include "cursor.h"
+#include "../Display/display.h"
+
+int cursor = 0;
+int cursor_max = 3;
+bool cursor_active = 1;
+
+void inc_cursor()
+{
+  if (!cursor_active)
+    return;
+
+  cursor += 1;
+  if (cursor > cursor_max)
+  {
+    cursor = 0;
+  }
+  tft_display_home(cursor);
+}
+
+void dec_cursor()
+{
+  if (!cursor_active)
+    return;
+
+  cursor -= 1;
+  if (cursor < 0)
+  {
+    cursor = cursor_max;
+  }
+  tft_display_home(cursor);
+}
+
+int get_cursor()
+{
+  return cursor;
+}
+
+int get_cursor_active()
+{
+  return cursor_active;
+}
+
+void confirm_cursor()
+{
+  if (cursor_active)
+  {
+    tft_display_menu(cursor);
+    cursor_active = 0;
+  }
+  else
+  {
+    tft_clear();
+    tft_display_home(cursor);
+    cursor_active = 1;
+  }
+}

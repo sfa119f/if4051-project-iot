@@ -1,0 +1,87 @@
+#include "display.h"
+
+TFT_eSPI tft = TFT_eSPI(); 
+
+void tft_init() {
+  Serial.print("TFT TEST");
+  tft.init();
+  tft_clear();
+  tft_display_home(0);
+}
+
+void tft_clear(){
+  tft.fillScreen(DISP_BACKGROUND_COLOR);
+}
+
+void tft_print_text(String text, int sz = 1, uint16_t color = DISP_TEXT_COLOR, bool bg_f = 0, uint16_t bg_color = DISP_CURSOR_COLOR){
+  if(bg_f){
+    tft.setTextColor(color, bg_color);
+  } else {
+    tft.setTextColor(color, 0); 
+  }
+  tft.setTextSize(sz);
+  tft.println(text.c_str());
+}
+
+void tft_display_home(int disp_cursor){
+  tft.setCursor(0, 0);
+  tft_print_text(menu_header);
+  for (int i = 0; i < menu_size; i++){
+    tft_print_text(menu_item[i], 1, DISP_TEXT_COLOR, i == disp_cursor);
+  }
+}
+
+void tft_display_attendance(){
+  tft.setCursor(0, 0);
+  tft_print_text("Attendance");
+  tft_print_text("Place your card");
+  tft_print_text("Go Back", 1, DISP_TEXT_COLOR, 1);
+}
+
+void tft_display_payment(){
+  tft.setCursor(0, 0);
+  tft_print_text("Payment");
+  tft_print_text("Place your card");
+  tft_print_text("Go Back", 1, DISP_TEXT_COLOR, 1);
+}
+
+void tft_display_top_up(){
+  tft.setCursor(0, 0);
+  tft_print_text("Top Up");
+  tft_print_text("Place your card");
+  tft_print_text("Go Back", 1, DISP_TEXT_COLOR, 1);
+}
+
+void tft_display_register(){
+  tft.setCursor(0, 0);
+  tft_print_text("Register");
+  tft_print_text("Place your card");
+  tft_print_text("Go Back", 1, DISP_TEXT_COLOR, 1);
+}
+
+void tft_display_finger(){
+  tft.setCursor(0, 0);
+  tft_print_text("Fingerprint");
+  tft_print_text("Place your finger");
+  tft_print_text("Go Back", 1, DISP_TEXT_COLOR, 1);
+}
+
+void tft_display_menu(int disp_cursor){
+  tft_clear();
+  switch(disp_cursor){
+    case 0:
+      tft_display_finger();
+      break;
+    case 1:
+      tft_display_payment();
+      break;
+    case 2:
+      tft_display_top_up();
+      break;
+    case 3:
+      tft_display_register();
+      break;
+    default:
+      tft_display_home(disp_cursor);
+  }
+}
