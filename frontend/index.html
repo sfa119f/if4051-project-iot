@@ -67,19 +67,24 @@
           <div class="card-title text-left font-weight-bold">Data Jumlah Kendaraan di Tempat Parkir</div>
           <div class="infographic">
             <div class="input-chart mb-3">
-              <div class="text-left mr-3 my-3">
-                <label for="dateParkir">Tanggal</label>
-                <input type="date" id="dateParkir">
-              </div>
-              <div class="text-left mr-3 my-3">
-                <button onclick="getDataParkir()" class="btn btn-primary">Go!</button>
-              </div>
               <div class="text-left mr-3 my-3 font-weight-bold">
                 Ketersediaan saat ini:
-                <span id="ketersediaan_parkir">48</span>
+                <span id="ketersediaan_parkir">61</span>
               </div>
+              <canvas  id="ketersediaanChart" style="width:100%;max-width:450px"></canvas>
             </div>
-            <canvas class="ml-md-4" id="parkirChart" style="width:100%;max-width:540px"></canvas>
+            <div class="ml-md-4">
+              <div class="d-flex">
+                <div class="text-left mr-3 my-3">
+                  <label for="dateParkir">Tanggal</label>
+                  <input type="date" id="dateParkir">
+                </div>
+                <div class="text-left mr-3 my-3">
+                  <button onclick="getDataParkir()" class="btn btn-primary">Go!</button>
+                </div>
+              </div>
+              <canvas id="parkirChart" style="width:100%;max-width:540px"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -133,6 +138,7 @@
     <script src="scripts/utils.js"></script>
     <script src="scripts/presensi.js"></script>
     <script src="scripts/parkir.js"></script>
+    <script src="scripts/ketersediaanParkir.js"></script>
     <script src="scripts/transaksi.js"></script>
   </body>
 </html>
