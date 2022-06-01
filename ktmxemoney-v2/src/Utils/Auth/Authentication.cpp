@@ -15,7 +15,7 @@ int Authentication::loop()
 
   if (this->rfidStatus == 0)
   {
-    if (this->fingerStatus == 0)
+    if (this->fingerStatus > 0)
     {
       this->authStatus = 0;
       this->activeStatus = -1;

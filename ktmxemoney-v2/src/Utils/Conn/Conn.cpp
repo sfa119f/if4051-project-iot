@@ -10,6 +10,7 @@ const char *topic = "reader";
 const int mqtt_port = 1883;
 const char *mqtt_ssid = "app-appktmxemoney";
 const char *mqtt_password = "BgkfOGumPp6HP9x6mn2prnsNCJ4Hej";
+// char lastpayload[128];
 
 // NTP Config
 const char *ntpServer = "pool.ntp.org";
@@ -22,6 +23,8 @@ unsigned long prevPubMillis = 0;
 unsigned long prevRecMillis = 0;
 unsigned int publishInterval = 2000;
 unsigned int reconnectInterval = 10000;
+
+byte lastPayload[128];
 
 // Connection Stuffs
 WiFiClient espClient;
@@ -37,10 +40,12 @@ void connection_init()
     Serial.print("Message:");
     for (int i = 0; i < length; i++)
     {
+      lastPayload[i] = payload[i];
       Serial.print((char)payload[i]);
     }
     Serial.println();
     Serial.println("-----------------------");
+    // lastpayload =
   };
 
   client.setServer(mqtt_broker, mqtt_port);

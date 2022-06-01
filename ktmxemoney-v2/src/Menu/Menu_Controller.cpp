@@ -1,5 +1,7 @@
 #include "Menu_Controller.h"
 
+#include <ArduinoJson.h>
+
 #include "Home/Menu_Home.h"
 #include "Attendance/Menu_Attendance.h"
 #include "Payment/Menu_Payment.h"
@@ -21,6 +23,8 @@ Menu *currMenu = &home;
 
 Authentication auth;
 int changeAuthStatus = -1;
+
+uint8_t control_status = 1;
 
 void controller_display()
 {
@@ -80,7 +84,6 @@ void controller_loop()
         break;
       case 3:
         currMenu = &regist;
-        auth.start(cursor);
         break;
       default:
         currMenu = &home;
@@ -89,15 +92,23 @@ void controller_loop()
       }
     }
     controller_display();
-    currMenu->loop();
   }
+
+  control_status = currMenu->loop();
+
+  if (control_status == 0)
+  {
+    currMenu = &home;
+    controller_display();
+  }
+
   if (changeAuthStatus != auth.loop())
   {
     changeAuthStatus = auth.getAuthStatus();
     if (changeAuthStatus == 0)
     {
       changeAuthStatus = -1;
-      char payload[128];
+      char payload[JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(8)];
       byte authId[16];
       auth.getAuthId(authId);
       createPayload(payload, authId, auth.getActiveCursor());

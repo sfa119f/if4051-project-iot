@@ -2,3 +2,4 @@
 
 void fingerInit();
 int fingerLoop();
+int fingerReg(uint8_t id);

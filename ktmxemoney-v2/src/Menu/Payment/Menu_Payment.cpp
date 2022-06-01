@@ -12,9 +12,11 @@ void Menu_Payment::display()
   // tftPrintText("4. Register", 1, DISP_TEXT_COLOR, (cursor == 3), DISP_CURSOR_COLOR);
 }
 
+byte payment_status = 1;
+
 uint8_t Menu_Payment::loop()
 {
-  return 0;
+  return payment_status;
 }
 
 int Menu_Payment::button1() { return 0; }

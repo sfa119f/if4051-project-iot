@@ -12,9 +12,11 @@ void Menu_TopUp::display()
   // tftPrintText("4. TopUp", 1, DISP_TEXT_COLOR, (cursor == 3), DISP_CURSOR_COLOR);
 }
 
+uint8_t topup_status = 1;
+
 uint8_t Menu_TopUp::loop()
 {
-  return 0;
+  return topup_status;
 }
 
 int Menu_TopUp::button1() { return 0; }

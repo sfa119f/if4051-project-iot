@@ -12,9 +12,11 @@ void Menu_Attendance::display()
   // tftPrintText("4. Register", 1, DISP_TEXT_COLOR, (cursor == 3), DISP_CURSOR_COLOR);
 }
 
+uint8_t attendance_status = 1;
+
 uint8_t Menu_Attendance::loop()
 {
-  return 0;
+  return attendance_status;
 }
 
 int Menu_Attendance::button1() { return 0; }

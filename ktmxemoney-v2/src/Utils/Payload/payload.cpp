@@ -1,4 +1,5 @@
 #include "payload.h"
+#include "../Conn/Conn.h"
 
 String byte_to_string(byte *buffer, byte bufferSize)
 {
@@ -11,17 +12,29 @@ String byte_to_string(byte *buffer, byte bufferSize)
   return text;
 }
 
-void createPayload(char payload[128], byte uid[16], int kind)
+void createPayload(char payload_buff[JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(8)], byte uid[16], int kind)
 {
+  time_t now;
   struct tm timeinfo;
   getLocalTime(&timeinfo);
-  char buf[32];
-  strftime(buf, sizeof(buf), "%FT%TZ", &timeinfo);
+  time(&now);
 
-  StaticJsonDocument<256> doc;
-  doc["time"] = String(buf);
-  doc["uid"] = byte_to_string(uid, 16);
-  doc["kind"] = kind;
+  const size_t capacity = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(8);
 
-  serializeJson(doc, payload, 128);
+  DynamicJsonDocument doc(capacity);
+  doc["timestamp"] = ((unsigned long long)now) * 1000;
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["device"] = WiFi.macAddress();
+  payload["uid"] = byte_to_string(uid, 16);
+  payload["mode"] = kind;
+
+  serializeJson(doc, payload_buff, capacity);
+}
+
+void getPayload()
+{
+  // const size_t capacity = JSON_OBJECT_SIZE(10);
+  // DynamicJsonDocument doc(capacity);
+  // deserializeJson(doc, lastPayload);
+  // Serial.println(doc["timestamp"]);
 }
