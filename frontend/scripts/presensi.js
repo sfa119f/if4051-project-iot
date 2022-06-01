@@ -126,6 +126,4 @@ async function getDataPresensi() {
     //   Math.max(newJmlMahasiswa) + 5;
     presensiChart.update();
   }
-  let data = await getRequest("https://jsonplaceholder.typicode.com/todos/1");
-  console.log(data);
 }
