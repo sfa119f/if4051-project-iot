@@ -1,3 +1,5 @@
+const maxPark = 500;
+
 const ketersediaanChart = new Chart("ketersediaanChart", {
   type: "pie",
   data: {
@@ -5,8 +7,8 @@ const ketersediaanChart = new Chart("ketersediaanChart", {
     datasets: [
       {
         backgroundColor: [orange1, blue2],
-        data: [61, 294],
-        sumData: 355,
+        data: [maxPark, 0],
+        sumData: maxPark,
         // data: [0, 0, 0, 0, 0],
         // sumData: 0,
       },
@@ -44,3 +46,21 @@ const ketersediaanChart = new Chart("ketersediaanChart", {
     },
   },
 });
+
+async function updateKetersediaan() {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const yyyy = today.getFullYear();
+  const hours = today.getHours();
+  const link = `localhost:8080/parkir/${dd}${mm}${yyyy}`;
+  let data = await getRequest(link);
+  ketersediaanChart.data.datasets[0].data = [
+    maxPark - data[hours],
+    data[hours],
+  ];
+  ketersediaanChart.update();
+}
+
+// updateKetersediaan();
+// setInterval(updateKetersediaan(), 60000);
