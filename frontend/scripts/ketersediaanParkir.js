@@ -57,12 +57,12 @@ async function updateKetersediaan() {
   const link = `http://localhost:8080/parkir/${dd}${mm}${yyyy}`;
   let data = await getRequest(link);
   ketersediaanChart.data.datasets[0].data = [
-    maxPark - data[hours],
-    data[hours],
+    maxPark - data[hours].jumlah,
+    data[hours].jumlah,
   ];
   ketersediaanChart.update();
   document.getElementById("ketersediaan_parkir").innerHTML =
-    maxPark - data[hours];
+    maxPark - data[hours].jumlah;
 }
 
-setInterval(updateKetersediaan(), 60000);
+setInterval(updateKetersediaan, 60000);

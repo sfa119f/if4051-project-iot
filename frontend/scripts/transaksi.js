@@ -15,7 +15,7 @@ optYear.addEventListener("input", function (evt) {
   }
   if (optYear.value == new Date().getFullYear()) {
     let month = new Date().getMonth();
-    for (let i = 0; i <= month; i++) {
+    for (let i = 0; i < month; i++) {
       const opt = document.createElement("option");
       opt.text = i + 1;
       opt.value = i + 1;
@@ -35,11 +35,11 @@ const transaksiChart = new Chart("transaksiChart", {
   type: "pie",
   data: {
     labels: [
-      "< 250 jt",
-      "250 - 300 jt",
-      "300 - 350 jt",
-      "350 - 400 jt",
-      "> 400 jt",
+      "< 250 rb",
+      "250 - 300 rb",
+      "300 - 350 rb",
+      "350 - 400 rb",
+      "> 400 rb",
     ],
     datasets: [
       {
@@ -84,7 +84,7 @@ const transaksiChart = new Chart("transaksiChart", {
   },
 });
 
-function getDataTransaksi(year, month) {
+async function getDataTransaksi(year, month) {
   let monthTransaksi, yearTransaksi;
   if (year && month) {
     monthTransaksi = month;
@@ -95,20 +95,36 @@ function getDataTransaksi(year, month) {
     monthTransaksi = document.getElementById("monthTransaksi").value;
     yearTransaksi = document.getElementById("yearTransaksi").value;
   }
-  console.log("monthTransaksi", monthTransaksi);
-  console.log("yearTransaksi", yearTransaksi);
   if (!monthTransaksi || !yearTransaksi) {
     alert("Isi tahun dan/atau bulan dengan benar!");
   } else {
-    const newYValue = [];
-    let newSum = 0;
-    while (newYValue.length != 5) {
-      let temp = Math.floor(Math.random() * 51);
-      newYValue.push(temp);
-      newSum += temp;
+    monthTransaksi =
+      monthTransaksi < 10 ? "0" + monthTransaksi : monthTransaksi;
+    const link = `http://localhost:8080/transaksi/${monthTransaksi}${yearTransaksi}`;
+    let data = await getRequest(link);
+    const newYValue = [0, 0, 0, 0, 0];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].pengeluaran < 250000) {
+        newYValue[0]++;
+      } else if (
+        data[i].pengeluaran >= 250000 &&
+        data[i].pengeluaran > 300000
+      ) {
+        newYValue[1]++;
+      } else if (
+        data[i].pengeluaran >= 300000 &&
+        data[i].pengeluaran > 350000
+      ) {
+        newYValue[2]++;
+      } else if (
+        data[i].pengeluaran >= 350000 &&
+        data[i].pengeluaran > 400000
+      ) {
+        newYValue[3]++;
+      } else newYValue[4]++;
     }
     transaksiChart.data.datasets[0].data = newYValue;
-    transaksiChart.data.datasets[0].sumData = newSum;
+    transaksiChart.data.datasets[0].sumData = data.length;
     transaksiChart.update();
   }
 }

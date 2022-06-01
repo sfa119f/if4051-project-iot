@@ -26,21 +26,21 @@ mk.addEventListener("input", function (evt) {
   }
 });
 
-// const labels = [];
-// const jmlMahasiswa = [];
-// for (let i = 1; i <= 16; i++) {
-//   labels.push(i);
-//   // jmlMahasiswa.push(0);
-//   if (i == 1 || i == 8 || i == 16) jmlMahasiswa.push(50);
-//   else {
-//     const min = 40;
-//     const rand = Math.floor(Math.random() * 11);
-//     jmlMahasiswa.push(rand + min);
-//   }
-// }
+const labels = [];
+const jmlMahasiswa = [];
+for (let i = 1; i <= 16; i++) {
+  labels.push(i);
+  // jmlMahasiswa.push(0);
+  if (i == 1 || i == 8 || i == 16) jmlMahasiswa.push(50);
+  else {
+    const min = 40;
+    const rand = Math.floor(Math.random() * 11);
+    jmlMahasiswa.push(rand + min);
+  }
+}
 
 const data = {
-  labels: [],
+  labels: labels,
   datasets: [
     {
       label: "Jumlah Mahasiswa",
@@ -86,7 +86,7 @@ const presensiChart = new Chart("presensiChart", {
             beginAtZero: true,
             steps: 10,
             stepValue: 5,
-            max: 5,
+            // max: 5,
           },
         },
       ],
@@ -115,15 +115,15 @@ async function getDataPresensi() {
     const link = `http://localhost:8080/presensi/${matkul}/${kelas}`;
     let data = await getRequest(link);
     const newJmlMahasiswa = [];
-    const label = [];
     for (let i = 0; i < data.length; i++) {
-      label.push(i + 1);
       newJmlMahasiswa.push(data[i].jumlah);
     }
-    presensiChart.labels = label;
+    while (newJmlMahasiswa.length < 16) {
+      newJmlMahasiswa.push(null);
+    }
     presensiChart.data.datasets[0].data = newJmlMahasiswa;
-    presensiChart.options.scales.yAxes[0].ticks.max =
-      Math.max(newJmlMahasiswa) + 5;
+    // presensiChart.options.scales.yAxes[0].ticks.max =
+    //   Math.max(newJmlMahasiswa) + 5;
     presensiChart.update();
   }
   let data = await getRequest("https://jsonplaceholder.typicode.com/todos/1");

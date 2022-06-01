@@ -5,22 +5,22 @@ const yyyy = today.getFullYear();
 document.getElementById("dateParkir").max = yyyy + "-" + mm + "-" + dd;
 document.getElementById("dateParkir").value = yyyy + "-" + mm + "-" + dd;
 
-// const labelParkir = [];
-// const jmlKendaraan = [];
-// for (let i = 0; i < 24; i++) {
-//   let temp = i < 10 ? "0" + i : i;
-//   labelParkir.push(`${temp}:00`);
-//   const min = 40;
-//   const rand = Math.floor(Math.random() * 11);
-//   jmlKendaraan.push(rand + min);
-// }
+const labelParkir = [];
+const jmlKendaraan = [];
+for (let i = 0; i < 24; i++) {
+  let temp = i < 10 ? "0" + i : i;
+  labelParkir.push(`${temp}:00`);
+  const min = 40;
+  const rand = Math.floor(Math.random() * 11);
+  jmlKendaraan.push(rand + min);
+}
 
 const dataParkir = {
-  labels: [],
+  labels: labelParkir,
   datasets: [
     {
       label: "Jumlah Kendaraan",
-      data: [],
+      data: jmlKendaraan,
       borderWidth: 2,
       borderColor: blue2,
       backgroundColor: blue3,
@@ -57,7 +57,6 @@ const parkirChart = new Chart("parkirChart", {
             beginAtZero: true,
             steps: 10,
             stepValue: 5,
-            max: 5,
           },
         },
       ],
@@ -86,17 +85,19 @@ async function getDataParkir() {
     const link = `http://localhost:8080/parkir/${date[2]}${date[1]}${date[0]}`;
     let data = await getRequest(link);
     const newJmlKendaraan = [];
-    const label = [];
     for (let i = 0; i < data.length; i++) {
-      if (!data[i].jumlah) break;
-      let temp = i < 10 ? "0" + i : i;
-      label.push(`${temp}:00`);
       newJmlKendaraan.push(data[i].jumlah);
     }
-    parkirChart.labels = label;
+    while (newJmlKendaraan.length < 24) {
+      newJmlKendaraan.push(null);
+    }
     parkirChart.data.datasets[0].data = newJmlKendaraan;
-    parkirChart.options.scales.yAxes[0].ticks.max =
-      Math.max(newJmlKendaraan) + 5;
+    // parkirChart.config.options.scales.yAxes[0].ticks = {
+    //   beginAtZero: true,
+    //   steps: 10,
+    //   stepValue: 5,
+    //   max: Math.max(newJmlKendaraan) + 5,
+    // };
     parkirChart.update();
   }
 }
