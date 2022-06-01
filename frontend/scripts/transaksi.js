@@ -1,12 +1,51 @@
+const optYear = document.getElementById("yearTransaksi");
+let year = new Date().getFullYear();
+for (let i = 2; i >= 0; i--) {
+  const opt = document.createElement("option");
+  opt.text = year - i;
+  opt.value = year - i;
+  optYear.add(opt);
+}
+
+const optMonth = document.getElementById("monthTransaksi");
+optYear.addEventListener("input", function (evt) {
+  optMonth.value = "";
+  while (optMonth.options.length > 1) {
+    optMonth.remove(1);
+  }
+  if (optYear.value == new Date().getFullYear()) {
+    let month = new Date().getMonth();
+    for (let i = 0; i <= month; i++) {
+      const opt = document.createElement("option");
+      opt.text = i + 1;
+      opt.value = i + 1;
+      optMonth.add(opt);
+    }
+  } else {
+    for (let i = 0; i < 12; i++) {
+      const opt = document.createElement("option");
+      opt.text = i + 1;
+      opt.value = i + 1;
+      optMonth.add(opt);
+    }
+  }
+});
+
 const transaksiChart = new Chart("transaksiChart", {
   type: "pie",
   data: {
-    labels: ["< 0.5 jt", "0.5 - 1 jt", "1 - 1.5 jt", "1.5 - 2 jt", "> 2 jt"],
+    labels: [
+      "< 250 jt",
+      "250 - 300 jt",
+      "300 - 350 jt",
+      "350 - 400 jt",
+      "> 400 jt",
+    ],
     datasets: [
       {
         backgroundColor: [blue2, blue3, orange1, orange2, orange3],
-        data: [5, 4, 3, 2, 1],
-        sumData: 15,
+        data: [0, 0, 0, 0, 0],
+        sumData: 0,
         // data: [0, 0, 0, 0, 0],
         // sumData: 0,
       },
@@ -45,13 +84,21 @@ const transaksiChart = new Chart("transaksiChart", {
   },
 });
 
-function getDataTransaksi() {
-  const monthTransaksi = document.getElementById("monthTransaksi").value;
-  const yearTransaksi = document.getElementById("yearTransaksi").value;
+function getDataTransaksi(year, month) {
+  let monthTransaksi, yearTransaksi;
+  if (year && month) {
+    monthTransaksi = month;
+    yearTransaksi = year;
+    document.getElementById("monthTransaksi").value = month;
+    document.getElementById("yearTransaksi").value = year;
+  } else {
+    monthTransaksi = document.getElementById("monthTransaksi").value;
+    yearTransaksi = document.getElementById("yearTransaksi").value;
+  }
   console.log("monthTransaksi", monthTransaksi);
   console.log("yearTransaksi", yearTransaksi);
   if (!monthTransaksi || !yearTransaksi) {
-    alert("Isi bulan dan/atau tahun dengan benar");
+    alert("Isi tahun dan/atau bulan dengan benar!");
   } else {
     const newYValue = [];
     let newSum = 0;
